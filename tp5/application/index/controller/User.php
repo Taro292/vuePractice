@@ -4,7 +4,7 @@ namespace app\index\controller;
 
 use think\Controller;
 use app\common\model\User as UserModel;
-
+header("Access-Control-Allow-Origin:*");
 class User extends Controller
 {
     // 注册
