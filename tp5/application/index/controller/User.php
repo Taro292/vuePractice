@@ -4,9 +4,14 @@ namespace app\index\controller;
 
 use think\Controller;
 use app\common\model\User as UserModel;
-header("Access-Control-Allow-Origin:*");
+
+header('Access-Control-Allow-Origin:*');
+header('Access-Control-Allow-Methods:*');
+header('Access-Control-Allow-Headers:*');
+header('Access-Control-Allow-Credentials:false');
 class User extends Controller
 {
+
     // 注册
     public function register()
     {
@@ -39,6 +44,7 @@ class User extends Controller
     // 登录
     public function login()
     {
+
         // 判断请求类型
         if (request()->isPost()) {
             $captcha = input('post.captcha'); //获取post的验证码
@@ -62,8 +68,8 @@ class User extends Controller
             } else {
                 return json(['msg' => '用户不存在', 'code' => 0]);
             }
-        }else{
-            return json(['msg'=>'请求方法错误','code'=>0]);
+        } else {
+            return json(['msg' => '请求方法错误', 'code' => 0]);
         }
     }
     // 个人信息修改接口
