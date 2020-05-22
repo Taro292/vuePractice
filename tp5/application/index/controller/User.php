@@ -55,19 +55,19 @@ class User extends Controller
             $token = $this->request->token('__token__', 'sha1'); //tp5自带表单令牌token
             if ($data) {
                 //captcha手动验证
-                if (!captcha_check($captcha)) {
-                    //验证失败
-                    return json(['msg' => '验证码错误', 'code' => 0]);
-                } else {
+                // if (!captcha_check($captcha)) {
+                //     //验证失败
+                //     return json(['msg' => '验证码错误', 'code' => 0]);
+                // } else {
                     if (md5($pwd) !== $data['password']) {
-                        return json(['msg' => '用户名或密码错误', 'code' => 0]);
+                        return json(['msg' => '用户名或密码错误', 'code' => 0, ]);
                     } else {
                         return json(['msg' => '登录成功', 'code' => 1, 'data' => $data, 'token' => $token]);
                     }
                 };
-            } else {
-                return json(['msg' => '用户不存在', 'code' => 0]);
-            }
+            // } else {
+            //     return json(['msg' => '用户不存在', 'code' => 0]);
+            // }
         } else {
             return json(['msg' => '请求方法错误', 'code' => 0]);
         }
