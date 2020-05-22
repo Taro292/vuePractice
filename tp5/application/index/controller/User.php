@@ -16,23 +16,29 @@ class User extends Controller
     public function register()
     {
         // 判断请求类型
-        if (request()->isGet()) {
-            $captcha = input('get.captcha'); //获取get的验证码
-            $pwd = input('get.password'); //获取密码
-            $email = input('get.email'); //获取邮箱     
+        if (request()->isPost()) {
+            $captcha = input('post.captcha'); //获取get的验证码
+            $pwd = input('post.password'); //获取密码
+            $email = input('post.email'); //获取邮箱     
             $user = model('user'); //调用模型
+            $alHave = $user->where('email',$email)->find();//查询是否存在邮箱
             $user['email'] = $email; //邮箱账号赋值
             $user['password'] = md5($pwd);
-            if (!captcha_check($captcha)) {
-                //验证失败
-                return json(['msg' => '验证码错误', 'code' => 0]);
-            } else {
-                if ($user->save()) {
-                    return json(['msg' => '注册成功', 'code' => 1]);
-                } else {
-                    return json(['msg' => '注册失败', 'code' => 0]);
+            // if (!captcha_check($captcha)) {
+            //     //验证失败
+            //     return json(['msg' => '验证码错误', 'code' => 0]);
+            // } else {
+                if($alHave){
+                    return json(['msg'=>'邮箱已存在','code'=>'0']);
+                }else{
+                    if ($user->save()) {
+                        return json(['msg' => '注册成功', 'code' => 1]);
+                    } else {
+                        return json(['msg' => '注册失败', 'code' => 0]);
+                    }
                 }
-            }
+                
+            // }
         }
     }
     // 获取token
@@ -60,7 +66,7 @@ class User extends Controller
                 //     return json(['msg' => '验证码错误', 'code' => 0]);
                 // } else {
                     if (md5($pwd) !== $data['password']) {
-                        return json(['msg' => '用户名或密码错误', 'code' => 0, ]);
+                        return json(['msg' => '用户名或密码错误', 'code' => 0 ]);
                     } else {
                         return json(['msg' => '登录成功', 'code' => 1, 'data' => $data, 'token' => $token]);
                     }

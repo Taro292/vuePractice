@@ -58,7 +58,7 @@
           </el-row>
           </el-form-item>-->
           <el-form-item>
-            <el-button type="primary" @click="login(loginForm)" class="loginBtn">登录</el-button>
+            <el-button type="primary" @click="register(registerForm)" class="registerBtn">注册</el-button>
           </el-form-item>
         </el-form>
         </el-tab-pane>
@@ -153,6 +153,9 @@ export default {
   watch: {},
   computed: {},
   methods: {
+    // 登录注册切换
+    handleClick () {
+    },
     // 登录方法
     login (loginForm) {
       this.$refs.loginForm.validate(async valid => {
@@ -162,15 +165,27 @@ export default {
           this.loginForm
         )
         if (res.code === 0) {
-          return this.$alert.error('账号或密码错误！')
+          return this.$alert.error(res.msg)
         } else {
           window.sessionStorage.setItem('token', res.token)
           this.$router.push('/home')
-          return this.$alert.success('登陆成功！')
+          return this.$alert.success(res.msg)
         }
       })
     },
     register (registerForm) {
+      this.$refs.registerForm.validate(async valid => {
+        if (!valid) return false
+        const { data: res } = await this.$http.post('index/user/register', this.registerForm)
+        if (res.code === '0') {
+          this.$refs.registerForm.resetFields() // 清空注册表单
+          return this.$alert.error(res.msg)
+        } else {
+          this.$refs.registerForm.resetFields() // 清空注册表单
+          this.activeName = 'login'// 注册成功后跳到登录面板
+          return this.$alert.success(res.msg)
+        }
+      })
     }
     // async login (loginForm) {
     //   const { data: res } = await this.$http.post('index/user/login', this.loginForm)
@@ -193,6 +208,10 @@ export default {
 }
 /* 登录按钮 */
 .loginBtn {
+  width: 100%;
+}
+/* 注册按钮 */
+.registerBtn {
   width: 100%;
 }
 </style>
