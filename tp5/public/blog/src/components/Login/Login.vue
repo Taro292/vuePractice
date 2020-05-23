@@ -8,7 +8,7 @@
             <el-input v-model="loginForm.email" placeholder="邮箱号" prefix-icon="el-icon-user-solid"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="loginForm.password" placeholder="密码" prefix-icon="el-icon-key"></el-input>
+            <el-input v-model="loginForm.password" type="password" placeholder="密码" prefix-icon="el-icon-key"></el-input>
           </el-form-item>
           <!-- <el-form-item  prop="captcha">
           <el-row>
@@ -37,10 +37,10 @@
             <el-input v-model="registerForm.email" placeholder="邮箱号" prefix-icon="el-icon-user-solid"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="registerForm.password" placeholder="密码" prefix-icon="el-icon-key"></el-input>
+            <el-input v-model="registerForm.password" type="password" placeholder="密码" prefix-icon="el-icon-key"></el-input>
           </el-form-item>
           <el-form-item prop="repassword">
-            <el-input v-model="registerForm.repassword" placeholder="确认密码" prefix-icon="el-icon-key"></el-input>
+            <el-input v-model="registerForm.repassword" type="password" placeholder="确认密码" prefix-icon="el-icon-key"></el-input>
           </el-form-item>
           <!-- <el-form-item  prop="captcha">
           <el-row>
@@ -167,8 +167,10 @@ export default {
         if (res.code === 0) {
           return this.$alert.error(res.msg)
         } else {
+          // 存储token
           window.sessionStorage.setItem('token', res.token)
-          this.$router.push('/home')
+          window.sessionStorage.setItem('userInfo', JSON.stringify(res.data))
+          this.$router.push('/home') // 路由跳转
           return this.$alert.success(res.msg)
         }
       })
@@ -176,7 +178,9 @@ export default {
     register (registerForm) {
       this.$refs.registerForm.validate(async valid => {
         if (!valid) return false
+        // 调用注册接口
         const { data: res } = await this.$http.post('index/user/register', this.registerForm)
+        // 判断返回的code码
         if (res.code === '0') {
           this.$refs.registerForm.resetFields() // 清空注册表单
           return this.$alert.error(res.msg)
@@ -214,4 +218,5 @@ export default {
 .registerBtn {
   width: 100%;
 }
+
 </style>

@@ -4,7 +4,10 @@ namespace app\index\controller;
 
 use think\Controller;
 use app\common\model\Article as ArticleModel;
-
+header('Access-Control-Allow-Origin:*');
+header('Access-Control-Allow-Methods:*');
+header('Access-Control-Allow-Headers:*');
+header('Access-Control-Allow-Credentials:false');
 class Article extends Controller
 {   
     public function article(){
@@ -23,6 +26,18 @@ class Article extends Controller
                 return json(['msg' => $data, 'code' => 1]);
             } else {
                 return json(['msg' => '暂无数据', 'code' => 0]);
+            }
+        }
+    }
+    // 获取文章列表
+    public function getArticleList(){
+        if(request()->isPost()){
+            $article=model('article');
+            $data=$article->allowField(true)->order('id','desc')->select();
+            if($data){
+                return json(['msg'=>$data,'code'=>1]);
+            }else{
+                return json(['msg'=>'暂无文章信息','code'=>0]);
             }
         }
     }
