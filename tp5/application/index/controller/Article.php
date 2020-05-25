@@ -4,6 +4,7 @@ namespace app\index\controller;
 
 use think\Controller;
 use app\common\model\Article as ArticleModel;
+use app\common\model\User as UserModel;
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:*');
 header('Access-Control-Allow-Headers:*');
@@ -19,11 +20,20 @@ class Article extends Controller
         // 判断请求
         if (request()->isPost()) {
             $title = input('post.title'); //标题
+            $id = input('post.id'); // id
             $article = model('article'); //文章表
+            $user = model('user');//用户表
             // 查询的数据（多条）
-            $data = $article->where('title', 'like', $title)->order('id', 'desc')->select();
+            if($title){
+                $data = $article->where('title', 'like', $title)->order('id', 'desc')->select();
+            }
+            if($id){
+                $data = $article-> where('id',$id)->find();
+                $user=$user->where('id',$data['user_id'])->find();
+                $data['avatar']=$user['avatar'];
+            }
             if ($article) {
-                return json(['msg' => $data, 'code' => 1]);
+                return json(['msg' => '获取文章成功', 'code' => 1,'data'=>$data]);
             } else {
                 return json(['msg' => '暂无数据', 'code' => 0]);
             }
@@ -47,22 +57,23 @@ class Article extends Controller
         // 判断请求
         if (request()->isPost()) {
             $title = input('post.title'); //标题
-            $abstract = input('post.abstract'); //摘要
+            // $abstract = input('post.abstract'); //摘要
             $user_id = input('post.user_id'); //发布者id
             $author = input('post.author'); //作者
-            $type = input('post.type'); //显示类型
+            $content = input('post.content'); //显示类型
             $imgs = input('post.imgs'); //图片
-            $tags = input('post.tags'); //文章标签
+            $tags=input('post.tags/a'); //文章标签
             $article=model('article');//文章表
-            $article['abstract']=$abstract;
+            $tag=implode(',',$tags);
+            // $article['abstract']=$abstract;
             $article['title']=$title;
             $article['user_id']=$user_id;
             $article['author']=$author;
-            $article['type']=$type;
+            $article['content']=$content;
             $article['imgs']=$imgs;
-            $article['tags']=$tags;
+            $article['tags']=$tag;
             if($article->save()){
-                return json(['msg'=>$article,'code'=>1]);
+                return json(['msg'=>'发布成功','code'=>1,'data'=>$tag]);
             }
             else{
                 return json(['msg'=>'添加文章失败','code'=>0]);

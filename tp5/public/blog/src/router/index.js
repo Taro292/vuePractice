@@ -2,21 +2,33 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../components/Home/Home.vue'
 import Index from '../components/Index/Index'
+import Write from '../components/Write/Write'
+import ArticleContainer from '../components/Article/ArticleCotainer'
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/home',
+    path: '/home', // 主页
     name: 'Home',
     component: Home,
     children: [
-      { path: '/index', name: 'Index', component: Index }
+      { path: '/index', name: 'Index', component: Index } // 首页
     ]
   },
   {
-    path: '/login',
+    path: '/login', // 登录页
     name: 'Login',
     component: () => import('../components/Login/Login')
+  },
+  {
+    path: '/write',
+    name: 'Write',
+    component: Write
+  },
+  {
+    path: '/article/:id',
+    name: 'article',
+    component: ArticleContainer
   }
 ]
 

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { DropdownMenu, DropdownItem, Dropdown, Tabs, TabPane, Container, Header, Main, Footer, Button, Form, FormItem, Input, Card, Row, Col, Image, Icon, Message, Menu, MenuItem, Submenu } from 'element-ui'
+import { Tag, Avatar, Aside, DropdownMenu, DropdownItem, Dropdown, Tabs, TabPane, Container, Header, Main, Footer, Button, Form, FormItem, Input, Card, Row, Col, Image, Icon, Message, Menu, MenuItem, Submenu } from 'element-ui'
 Vue.prototype.$alert = Message// 弹窗
 Vue.use(Form) // 表单
 Vue.use(Input) // 输入框
@@ -22,3 +22,6 @@ Vue.use(Tabs) // 标签
 Vue.use(Dropdown) // 下拉按钮
 Vue.use(DropdownItem) // 下拉按钮
 Vue.use(DropdownMenu) // 下拉按钮
+Vue.use(Aside) // 菜单布局
+Vue.use(Avatar) // 头像
+Vue.use(Tag) // 标签

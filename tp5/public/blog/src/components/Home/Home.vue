@@ -38,18 +38,25 @@
         <el-col :span="9">
             <el-card class="article">
               <ul id="article-list">
-                <li v-for="(item ,index) in article" :key="index">
+                <li v-for="(item) in article" :key="item.id" class="articleItem" @click="watchArticle(item.id)">
                 <el-container>
-                  <el-header>{{index}}</el-header>
-                  <el-main>{{item}}</el-main>
+                  <el-header>{{item.title}}</el-header>
+                  <el-main class="articleItemMain">
+                    <el-row>
+                      <el-col :span="16">{{item}}</el-col>
+                      <el-col :span="8">{{item.imgs}}</el-col>
+                    </el-row>
+                  </el-main>
                   <el-footer>Footer</el-footer>
                 </el-container>
                 </li>
               </ul>
             </el-card>
         </el-col>
+        <!-- 用户信息栏 -->
         <el-col :span="3">
             <el-card>
+                <el-button type="success" plain icon="el-icon-edit-outline" class="addArticleBtn" @click="addArticle()">发表</el-button>
             </el-card>
         </el-col>
 
@@ -84,6 +91,12 @@ export default {
   watch: {},
   computed: {},
   methods: {
+    // 进入相应的文章详情页
+    watchArticle (id) {
+      this.$router.push({
+        path: `article/${id}`
+      })
+    },
     // 导航栏选中监听
     handleSelect (key, keypath) {
       console.log(key, keypath)
@@ -102,10 +115,14 @@ export default {
       }
       this.article = res.msg
       console.log(this.article)
+    },
+    // 发表文章跳转
+    addArticle () {
+      this.$router.push('/write')
     }
   },
   created () {
-    const data = window.sessionStorage.getItem('userInfo') // 获取已登录的用户信息
+    const data = JSON.parse(window.sessionStorage.getItem('userInfo')) // 获取已登录的用户信息
     const avatar = data.avatar
     this.avatar = avatar
     this.getArticle()
@@ -145,5 +162,18 @@ export default {
 /* 文章列表容器 */
 .article{
     margin-right: 5px;
+}
+/* 文章列表单项 */
+.articleItem{
+    list-style: none;
+    text-align: left;
+}
+/* 文章列表单项左侧 */
+.articleItemMain{
+    line-height: 25px;
+}
+/* 发表文章按钮 */
+.addArticleBtn{
+    width: 100%;
 }
 </style>
