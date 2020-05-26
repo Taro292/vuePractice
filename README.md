@@ -1,2 +1,0 @@
-# vuePractice
-vue test
